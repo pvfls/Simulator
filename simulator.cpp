@@ -5,7 +5,7 @@ using namespace std;
 
 void simulator()
 {
-	Simulator config();
+	Simulator config;
 
 	config.setPathName();
 	string userInput;

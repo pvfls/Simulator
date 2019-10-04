@@ -76,6 +76,8 @@ void Simulator::checkSingle(std::string part)
 
 	if(part == "clear")
 		aux = "cls";
+	else if(part == "ls")
+		aux = "dir /b";
 	else
 	{
 		std::cerr << (char)39 << part << (char)39 << " nao e reconhecido como um comando interno\nou externo, um programa operavel ou um arquivo em lotes." << std::endl; 

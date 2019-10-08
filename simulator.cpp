@@ -1,22 +1,19 @@
 #include <bits/stdc++.h>
-#include "class_Simulator.hpp"
+#include "class_Simulator.h"
 
 using namespace std;
 
 void simulator()
 {
 	Simulator config;
-
-	config.setPathName();
 	string userInput;
 
-	cout << endl << config.actual_Dir();
+	cout << endl << config.dir();
 	while(getline(cin, userInput))
 	{
-		config.setLinuxInst(userInput);
-		config.decoder();
+		config.decoder(userInput);
 		config.run();
-		cout << config.actual_Dir();
+		cout << config.dir();
 	}
 }
 

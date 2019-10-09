@@ -2,6 +2,11 @@ class Simulator
 {
 	private:
 		std::string pathName;
+        
+        std::string hostName;
+        std::string hostBegin;
+        std::string hostEnd;
+
 		std::vector<std::string> windowsInst;
         std::vector<std::string> linuxInst;
 
@@ -14,32 +19,103 @@ class Simulator
 		Simulator();
         void appendVector(std::vector<std::string>);
         std::string dir();
+        std::string host();
+        std::string Template();
         void run();
         void decoder(std::string);
         void debugger();
 };
 
-std::string setPathName()
+
+std::string Simulator::dir()
 {
-	char ch;
-    std::string path;
-	std::ifstream pathName;
+    return this->pathName;
+}
 
-	system("cd > path.txt");
-	
-	pathName.open("path.txt", std::ifstream::in);
-	while(pathName && pathName.get(ch))
-	{
-		if(ch == '\n')
-			break;
-		else
-			path.push_back(ch);
-	}
-	path.push_back('>');
-	pathName.close();
-	remove("path.txt");
 
-    return path;
+std::string Simulator::Template()
+{
+    return (this->hostName + this->hostBegin + this->pathName + this->hostEnd);
+}
+
+std::string setPathName(std::string user)
+{
+    char ch;
+    size_t size;
+    std::string path, npath;
+    std::ifstream pathName;
+
+    system("cd > path.txt");
+    
+    pathName.open("path.txt", std::ifstream::in);
+    while(pathName && pathName.get(ch))
+    {
+        if(ch == '\n')
+            break;
+        else
+            path.push_back(ch);
+    }
+    pathName.close();
+    remove("path.txt");
+
+    size = path.size();
+    for(int i = 0; i < size; i++)
+    {
+        if(path[i] == '\\')
+        {
+            path[i] = '/';
+        }
+    }
+
+    size = path.find(user);
+
+    npath = path.substr(size + user.size());
+
+    return npath;
+}
+
+std::string setHostBegin()
+{
+    std::string space;
+    space.push_back(':');
+    space.push_back('~'); 
+    return space;
+}
+
+std::string setHostEnd()
+{
+    std::string space;
+    space.push_back('$');
+    space.push_back(' '); 
+    return space;
+}
+
+std::string setHostName()
+{
+    char ch;
+    std::string host;
+    std::ifstream hostname;
+
+    system("echo %username% > hostname.txt");
+    
+    hostname.open("hostname.txt", std::ifstream::in);
+    while(hostname && hostname.get(ch))
+    {
+        if(ch == '\n')
+            break;
+        else
+            host.push_back(ch);
+    }
+    hostname.close();
+    remove("hostname.txt");
+    host.pop_back();
+
+    return host;
+}
+
+std::string Simulator::host()
+{
+    return this->hostName;
 }
 
 std::string substitutionBar(std::vector<std::string> dir, std::string path)
@@ -65,17 +141,15 @@ std::string substitutionBar(std::vector<std::string> dir, std::string path)
 
 Simulator::Simulator()
 {
-	this->pathName = setPathName();
+    this->hostBegin = setHostBegin();
+    this->hostEnd = setHostEnd();
+    this->hostName = setHostName();
+	this->pathName = setPathName(this->hostName);
 
 	system("title Simulator");
 	system("cls");
 	system("color 0F");
-	std::cout << "Simulator Terminal [Version 0.0.0000]" << std::endl << "GPL 2018 Pulho " << std::endl;
-}
-
-std::string Simulator::dir()
-{
-    return this->pathName;
+	std::cout << "Simulator Terminal [Version 0.0.0010]" << std::endl << "GPL 2018 Pulho " << std::endl;
 }
 
 void Simulator::decoder(std::string instr)

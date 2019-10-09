@@ -8,12 +8,12 @@ void simulator()
 	Simulator config;
 	string userInput;
 
-	cout << endl << config.dir();
+	cout << endl << config.Template();
 	while(getline(cin, userInput))
 	{
 		config.decoder(userInput);
 		config.run();
-		cout << config.dir();
+		cout << config.Template();
 	}
 }
 
